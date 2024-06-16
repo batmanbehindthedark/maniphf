@@ -1,11 +1,14 @@
-FROM python:3.10
+FROM python:3.9-slim-buster
 
-WORKDIR /PHFILES
+# Install all the required packages
+WORKDIR /usr/src/app
+RUN chmod 777 /usr/src/app
+RUN apt-get -qq update
+RUN apt-get -qq install -y --no-install-recommends curl git 
 
-COPY requirements.txt ./
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-RUN pip install -r requirements.txt
 
-COPY . . 
-
-CMD ["python3", "bot.py"]
+COPY . .
+CMD ["bash", "start.sh"]
